@@ -1,30 +1,59 @@
 :root {
-    /* Core palette */
-    --bg: #000000; /* page background */
-    --panel: #0b0b0b; /* panels / cards */
-    --muted: #6b6b6b; /* secondary text */
-    --muted-2: #4b5563; /* alternate muted */
-    --border: rgba(255, 255, 255, 0.12);
-    --muted-border: rgba(255, 255, 255, 0.06);
+  /* Core palette - Dark Mode (default) */
+  --bg: #000000; /* page background */
+  --panel: #0b0b0b; /* panels / cards */
+  --muted: #6b6b6b; /* secondary text */
+  --muted-2: #4b5563; /* alternate muted */
+  --border: rgba(255, 255, 255, 0.12);
+  --muted-border: rgba(255, 255, 255, 0.06);
+  --text-primary: #ffffff;
+  --text-secondary: #e6eef6;
 
-    /* Accent colors */
-    --accent: #00e5ff; /* aqua/cyan accent used for callouts */
-    --accent-600: #00c4d9;
-    --success: #22c55e; /* green */
-    --warning: #f59e0b; /* amber */
-    --danger: #ef4444; /* red */
+  /* Accent colors */
+  --accent: #00e5ff; /* aqua/cyan accent used for callouts */
+  --accent-600: #00c4d9;
+  --success: #22c55e; /* green */
+  --warning: #f59e0b; /* amber */
+  --danger: #ef4444; /* red */
 
-    /* Typography */
-    --ui-font:
-        system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    --mono-font:
-        ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono",
-        "Courier New", monospace;
+  /* Typography - Increased base sizes */
+  --ui-font:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --mono-font:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New",
+    monospace;
+  --base-font-size: 16px; /* Increased from 15px */
 
-    /* Sizes */
-    --nav-width: 18rem;
-    --content-max: 72rem;
-    --radius: 0px;
+  /* Sizes */
+  --nav-width: 18rem;
+  --content-max: 72rem;
+  --radius: 0px;
+}
+
+/* Light Mode */
+.light,
+html.light {
+  --bg: #ffffff;
+  --panel: #f6f7fb;
+  --muted: #4b5563;
+  --muted-2: #6b7280;
+  --border: rgba(0, 0, 0, 0.12);
+  --muted-border: rgba(0, 0, 0, 0.06);
+  --text-primary: #111827;
+  --text-secondary: #1f2937;
+}
+
+/* Dark Mode (explicit) */
+.dark,
+html.dark {
+  --bg: #000000;
+  --panel: #0b0b0b;
+  --muted: #6b6b6b;
+  --muted-2: #4b5563;
+  --border: rgba(255, 255, 255, 0.12);
+  --muted-border: rgba(255, 255, 255, 0.06);
+  --text-primary: #ffffff;
+  --text-secondary: #e6eef6;
 }
 
 /* Tailwind import (if your build picks this up) */
@@ -34,13 +63,17 @@
 html,
 body,
 #root {
-    height: 100%;
-    background-color: var(--bg);
-    color: #ffffff;
-    font-family: var(--ui-font);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    margin: 0;
+  height: 100%;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--ui-font);
+  font-size: var(--base-font-size);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Typography helpers */
@@ -49,9 +82,21 @@ h2,
 h3,
 h4,
 h5 {
-    letter-spacing: -0.02em;
-    font-weight: 900;
-    color: #fff;
+  letter-spacing: -0.02em;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+h1 {
+  font-size: 2.75rem; /* Increased */
+}
+
+h2 {
+  font-size: 2.25rem; /* Increased */
+}
+
+h3 {
+  font-size: 1.75rem; /* Increased */
 }
 
 p,
@@ -59,124 +104,126 @@ label,
 input,
 select,
 textarea {
-    font-family: var(--mono-font);
-    color: #e6eef6;
+  font-family: var(--mono-font);
+  color: var(--text-secondary);
+  font-size: 1.05rem; /* Increased from 0.95rem */
 }
 
 /* Selection */
 ::selection {
-    background: var(--accent);
-    color: #000;
+  background: var(--accent);
+  color: #000;
 }
 
 /* Utility for uppercase tiny labels used across app */
 .u-label-upper {
-    text-transform: uppercase;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    font-weight: 800;
-    color: var(--muted);
+  text-transform: uppercase;
+  font-size: 12px; /* Increased from 11px */
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  color: var(--muted);
 }
 
 /* Buttons - primary and outline variants */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1rem;
-    border-radius: var(--radius);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    cursor: pointer;
-    transition:
-        transform 0.08s ease,
-        background-color 0.12s ease,
-        color 0.12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem; /* Increased padding */
+  border-radius: var(--radius);
+  font-weight: 900;
+  font-size: 0.9rem; /* Increased from 0.85rem */
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition:
+    transform 0.08s ease,
+    background-color 0.12s ease,
+    color 0.12s ease;
 }
 
 /* Primary white button used in the app */
 .btn--primary {
-    background: #fff;
-    color: #000;
-    border: 1px solid rgba(0, 0, 0, 0.12);
+  background: var(--text-primary);
+  color: var(--bg);
+  border: 1px solid var(--border);
 }
 .btn--primary:hover {
-    transform: translateY(-1px);
+  transform: translateY(-1px);
 }
 
 /* Outline / ghost button */
 .btn--ghost {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--muted-border);
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--muted-border);
 }
 .btn--ghost:hover {
-    color: #fff;
-    border-color: var(--border);
+  color: var(--text-primary);
+  border-color: var(--border);
 }
 
 /* Card surface */
 .card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 }
 
 /* Table base styling */
 .table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: var(--mono-font);
-    font-size: 0.8rem;
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono-font);
+  font-size: 1rem; /* Increased from 0.9rem */
 }
 .table thead th {
-    background: #fff;
-    color: #000;
-    font-weight: 900;
-    padding: 0.75rem 1rem;
-    text-transform: uppercase;
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
+  background: var(--text-primary);
+  color: var(--bg);
+  font-weight: 900;
+  padding: 0.95rem 1.1rem; /* Increased padding */
+  text-transform: uppercase;
+  font-size: 0.9rem; /* Increased from 0.8rem */
+  letter-spacing: 0.06em;
 }
 .table tbody td {
-    padding: 0.85rem 1rem;
-    color: rgba(255, 255, 255, 0.65);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 1.05rem 1.1rem; /* Increased padding */
+  color: var(--muted);
+  border-bottom: 1px solid var(--muted-border);
 }
 .table tbody tr:hover td {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.02);
+  color: var(--text-primary);
+  background: var(--muted-border);
 }
 
 /* Small badge styles */
 .badge {
-    display: inline-block;
-    padding: 0.15rem 0.5rem;
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    border-radius: 2px;
-    border: 1px solid var(--muted-border);
-    color: var(--muted);
-    background: transparent;
+  display: inline-block;
+  padding: 0.25rem 0.6rem; /* Increased padding */
+  font-size: 11px; /* Increased from 10px */
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-radius: 2px;
+  border: 1px solid var(--muted-border);
+  color: var(--muted);
+  background: transparent;
 }
 .badge--success {
-    background: #fff;
-    color: #000;
-    border-color: rgba(255, 255, 255, 0.12);
-    font-weight: 900;
+  background: var(--text-primary);
+  color: var(--bg);
+  border-color: var(--border);
+  font-weight: 900;
 }
 .badge--warning {
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.4);
+  color: var(--text-primary);
+  border-color: var(--border);
 }
 .badge--danger {
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.8);
+  color: var(--text-primary);
+  border-color: var(--border);
 }
 
 /* Form controls */
@@ -186,105 +233,136 @@ input[type="number"],
 input[type="date"],
 select,
 textarea {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    padding: 0.6rem 0.9rem;
-    color: #fff;
-    font-size: 0.85rem;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: var(--radius);
-    transition:
-        border-color 0.12s ease,
-        box-shadow 0.12s ease;
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.7rem 1.1rem; /* Increased padding */
+  color: var(--text-primary);
+  font-size: 1.05rem; /* Increased from 0.95rem */
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: var(--radius);
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
 }
 input:focus,
 select:focus,
 textarea:focus {
-    outline: none;
-    border-color: #fff;
-    box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.06);
+  outline: none;
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 3px var(--muted-border);
 }
 
 /* Small helper classes */
 .text-muted {
-    color: var(--muted);
+  color: var(--muted);
 }
 .text-muted-2 {
-    color: var(--muted-2);
+  color: var(--muted-2);
 }
 .bg-accent {
-    background: var(--accent);
-    color: #000;
+  background: var(--accent);
+  color: #000;
 }
 .bg-success {
-    background: var(--success);
-    color: #000;
+  background: var(--success);
+  color: #000;
 }
 
 /* Sidebar sizing helpers */
 .app-sidebar {
-    width: var(--nav-width);
-    min-width: var(--nav-width);
+  width: var(--nav-width);
+  min-width: var(--nav-width);
 }
 
 /* Responsive helpers */
 @media (max-width: 1024px) {
-    .app-sidebar {
-        display: none;
-    }
-    .mobile-only {
-        display: block;
-    }
-}
-
-/* Light theme fallback (if user prefers light mode) */
-@media (prefers-color-scheme: light) {
-    :root {
-        --bg: #ffffff;
-        --panel: #f6f7fb;
-        --muted: #4b5563;
-        --muted-2: #6b7280;
-        --border: rgba(0, 0, 0, 0.06);
-        --muted-border: rgba(0, 0, 0, 0.04);
-    }
-    body {
-        color: #111827;
-    }
-    .btn--primary {
-        background: #111827;
-        color: #fff;
-    }
+  .app-sidebar {
+    display: none;
+  }
+  .mobile-only {
+    display: block;
+  }
 }
 
 /* Accessibility utilities */
 .sr-only {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 /* Small visual helpers used across the app */
 .kicker {
-    font-family: var(--mono-font);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    color: var(--muted);
-    letter-spacing: 0.18em;
-    font-weight: 900;
+  font-family: var(--mono-font);
+  font-size: 0.95rem; /* Increased from 0.85rem */
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+  font-weight: 900;
 }
 
 /* Form small grid used in modal */
 .grid-2 {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* Card surface */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.light .card {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
 }
 
 /* End of file */
+
+/* Theme-aware utility overrides (map existing utility classes to CSS variables)
+   This makes classes like `bg-black` / `bg-white` and `text-white` / `text-black`
+   follow the current theme (html.dark or html.light). */
+
+html.dark .bg-black,
+html.light .bg-black {
+  background-color: var(--bg) !important;
+}
+
+html.dark .bg-white,
+html.light .bg-white {
+  background-color: var(--text-primary) !important;
+}
+
+html.dark .text-white,
+html.light .text-white {
+  color: var(--text-primary) !important;
+}
+
+html.dark .text-black,
+html.light .text-black {
+  color: var(--bg) !important;
+}
+
+html.dark .border-white,
+html.light .border-white {
+  border-color: var(--text-primary) !important;
+}
+
+html.dark .border-black,
+html.light .border-black {
+  border-color: var(--bg) !important;
+}

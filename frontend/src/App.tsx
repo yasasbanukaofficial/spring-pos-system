@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
@@ -69,6 +69,18 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editingItem, setEditingItem] = useState<any | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+
+  // Theme effect
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+    } else {
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
+    }
+  }, [isDarkMode]);
 
   // CRUD Actions
   const handleSave = (type: TabType, data: any) => {
@@ -120,7 +132,11 @@ export default function App() {
 
       {/* Main Content */}
       <main className="flex-1 min-w-0 flex flex-col">
-        <Header activeTab={activeTab} />
+        <Header
+          activeTab={activeTab}
+          isDarkMode={isDarkMode}
+          onToggleTheme={() => setIsDarkMode(!isDarkMode)}
+        />
 
         {/* Dynamic Content Area */}
         <div className="p-12 max-w-6xl w-full mx-auto">
