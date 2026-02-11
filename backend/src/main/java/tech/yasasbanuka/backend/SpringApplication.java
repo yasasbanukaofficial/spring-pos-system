@@ -1,13 +1,12 @@
 package tech.yasasbanuka.backend;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BackendApplication {
+public class SpringApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BackendApplication.class, args);
+        org.springframework.boot.SpringApplication.run(SpringApplication.class, args);
     }
 
 }
