@@ -13,12 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
+@Entity(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String customerId;
     private LocalDate orderDate;
     private double total;
 

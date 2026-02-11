@@ -1,26 +1,36 @@
+export type PageID = "dashboard" | "customers" | "items" | "orders";
+
 export interface Customer {
   id: string;
   name: string;
   email: string;
-  phone: string;
-  status: "Active" | "Inactive";
 }
 
-export interface InventoryItem {
+export interface Item {
   id: string;
   name: string;
-  stock: number;
-  unit: string;
-  price: number;
+  description: string;
+  unitPrice: number;
+  quantity: number;
 }
 
 export interface Order {
   id: string;
-  customerName: string;
-  service: string;
-  amount: number;
-  status: "Completed" | "Ongoing";
-  date: string;
+  orderDate: string;
+  total?: number;
+  customer?: Customer;
+  customerId?: string;
+  orderDetails?: Array<{
+    id: string;
+    itemCode: string;
+    qty: number;
+    unitPrice: number;
+  }>;
 }
 
-export type TabType = "customers" | "items" | "orders";
+export interface OrderItem {
+  id: string;
+  item: Item;
+  quantity: number;
+  price: number;
+}
