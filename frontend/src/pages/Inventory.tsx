@@ -37,7 +37,7 @@ export const InventoryPage = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const payload = {
-      id: formData.get("id") as string,
+      id: modal.edit ? modal.edit.id : (formData.get("id") as string),
       name: formData.get("name") as string,
       description: formData.get("description") as string,
       unitPrice: parseFloat(formData.get("unitPrice") as string),
@@ -47,7 +47,7 @@ export const InventoryPage = () => {
     try {
       if (modal.edit) {
         // Update existing item
-        const result = await fetch(`${URL}/${modal.edit.id}`, {
+        const result = await fetch(URL, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

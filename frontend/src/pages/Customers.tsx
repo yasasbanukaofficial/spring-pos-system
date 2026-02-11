@@ -37,7 +37,7 @@ export const CustomersPage = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const payload = {
-      id: formData.get("id") as string,
+      id: modal.edit ? modal.edit.id : (formData.get("id") as string),
       name: formData.get("name") as string,
       email: formData.get("email") as string,
     };
@@ -45,7 +45,7 @@ export const CustomersPage = () => {
     try {
       if (modal.edit) {
         // Update existing customer
-        const result = await fetch(`${URL}/${modal.edit.id}`, {
+        const result = await fetch(URL, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",

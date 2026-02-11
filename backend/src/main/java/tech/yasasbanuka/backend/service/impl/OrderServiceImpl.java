@@ -36,6 +36,14 @@ public class OrderServiceImpl implements OrderService {
             OrderDetails orderDetailsEntity = modelMapper.map(orderDetailsDTO, OrderDetails.class);
             orderDetailsEntity.setOrder(order);
             Item item = itemRepository.findById(orderDetailsDTO.getItemCode()).orElseThrow(() -> new RuntimeException("Item Not found"));
+            
+            // Reduce item quantity
+            if (item.getQuantity() < orderDetailsDTO.getQty()) {
+                throw new RuntimeException("Insufficient stock for item: " + item.getName());
+            }
+            item.setQuantity(item.getQuantity() - orderDetailsDTO.getQty());
+            itemRepository.save(item);
+            
             orderDetailsEntity.setItem(item);
             return orderDetailsEntity;
         }).toList();
@@ -49,6 +57,13 @@ public class OrderServiceImpl implements OrderService {
         Order existingOrder = orderRepository.findById(orderDTO.getId())
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderDTO.getId()));
 
+        // Restore quantities from old order details
+        existingOrder.getOrderDetails().forEach(oldDetail -> {
+            Item item = oldDetail.getItem();
+            item.setQuantity(item.getQuantity() + oldDetail.getQty());
+            itemRepository.save(item);
+        });
+
         Customer customer = customerRepository.findById(orderDTO.getCustomerId())
                 .orElseThrow(() -> new RuntimeException("Customer Not found"));
 
@@ -61,6 +76,14 @@ public class OrderServiceImpl implements OrderService {
 
             Item item = itemRepository.findById(dto.getItemCode())
                     .orElseThrow(() -> new RuntimeException("Item Not found: " + dto.getItemCode()));
+            
+            // Deduct new quantities
+            if (item.getQuantity() < dto.getQty()) {
+                throw new RuntimeException("Insufficient stock for item: " + item.getName());
+            }
+            item.setQuantity(item.getQuantity() - dto.getQty());
+            itemRepository.save(item);
+            
             detail.setItem(item);
 
             return detail;
@@ -74,9 +97,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteOrder(String id) {
-        if (!orderRepository.existsById(id)) {
-            throw new RuntimeException("Cannot delete. Order not found with ID: " + id);
-        }
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cannot delete. Order not found with ID: " + id));
+        
+        // Restore item quantities
+        order.getOrderDetails().forEach(detail -> {
+            Item item = detail.getItem();
+            item.setQuantity(item.getQuantity() + detail.getQty());
+            itemRepository.save(item);
+        });
+        
         orderRepository.deleteById(id);
     }
 

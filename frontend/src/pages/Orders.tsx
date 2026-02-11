@@ -37,10 +37,11 @@ export const OrdersPage = () => {
       const ordersWithDetails = ordersData.map((order: Order) => ({
         ...order,
         customer: customers.find((c) => c.id === order.customerId),
-        total: order.orderDetails?.reduce(
-          (sum, detail) => sum + detail.qty * detail.unitPrice,
-          0
-        ) || 0,
+        total:
+          order.orderDetails?.reduce(
+            (sum, detail) => sum + detail.qty * detail.unitPrice,
+            0,
+          ) || 0,
       }));
       setOrders(ordersWithDetails);
     } catch (error) {
@@ -169,15 +170,16 @@ export const OrdersPage = () => {
 
     // Map order items to orderDetails matching backend DTO structure
     // Generate unique IDs for each order detail
+    const orderId = modal.edit ? modal.edit.id : (formData.get("id") as string);
     const orderDetails = orderItems.map((orderItem, index) => ({
-      id: `${formData.get("id")}-${index + 1}`,
+      id: `${orderId}-${index + 1}`,
       itemCode: orderItem.itemId,
       qty: Number(orderItem.quantity),
       unitPrice: Number(orderItem.price),
     }));
 
     const payload = {
-      id: formData.get("id") as string,
+      id: orderId,
       customerId: customerId,
       orderDate: formData.get("orderDate") as string,
       orderDetails: orderDetails,
@@ -188,7 +190,7 @@ export const OrdersPage = () => {
     try {
       if (modal.edit) {
         // Update existing order
-        const result = await fetch(`${ORDER_URL}/${modal.edit.id}`, {
+        const result = await fetch(ORDER_URL, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -279,7 +281,9 @@ export const OrdersPage = () => {
             <tr key={o.id} className="hover:bg-white/5 transition-colors">
               <td className="p-4 text-gray-400">{o.id}</td>
               <td className="p-4">{o.orderDate}</td>
-              <td className="p-4 font-black">{o.customer?.name || "Unknown"}</td>
+              <td className="p-4 font-black">
+                {o.customer?.name || "Unknown"}
+              </td>
               <td className="p-4 text-right">${(o.total || 0).toFixed(2)}</td>
               <td className="p-4 text-right">
                 <button

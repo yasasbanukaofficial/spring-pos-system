@@ -7,7 +7,7 @@ import tech.yasasbanuka.backend.service.ItemService;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/items")
 @RequiredArgsConstructor
