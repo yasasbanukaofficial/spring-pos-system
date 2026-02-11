@@ -39,6 +39,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDTO> getAllItems() {
-        return List.of();
+        List<Item> items = itemRepository.findAll();
+        return items.stream().map(item -> modelMapper.map(item, ItemDTO.class)).toList();
     }
 }

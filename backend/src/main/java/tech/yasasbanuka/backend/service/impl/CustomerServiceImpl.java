@@ -41,6 +41,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> customers = customerRepository.findAll();
-        return customers.stream().map(customer -> modelMapper.map(customer, CustomerDTO.class)).collect(Collectors.toList());
+        return customers.stream().map(customer -> modelMapper.map(customer, CustomerDTO.class)).toList();
     }
 }
