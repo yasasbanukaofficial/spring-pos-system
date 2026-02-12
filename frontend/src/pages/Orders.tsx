@@ -14,6 +14,7 @@ export const OrdersPage = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [orderItems, setOrderItems] = useState<OrderItemEntry[]>([]);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string>("");
   const [modal, setModal] = useState<{ open: boolean; edit: Order | null }>({
     open: false,
     edit: null,
@@ -133,7 +134,7 @@ export const OrdersPage = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    const customerId = formData.get("customerId") as string;
+    const customerId = selectedCustomerId;
     const selectedCustomer = customers.find((c) => c.id === customerId);
 
     // Validation
@@ -169,10 +170,8 @@ export const OrdersPage = () => {
     }
 
     // Map order items to orderDetails matching backend DTO structure
-    // Generate unique IDs for each order detail
     const orderId = modal.edit ? modal.edit.id : (formData.get("id") as string);
-    const orderDetails = orderItems.map((orderItem, index) => ({
-      id: `${orderId}-${index + 1}`,
+    const orderDetails = orderItems.map((orderItem) => ({
       itemCode: orderItem.itemId,
       qty: Number(orderItem.quantity),
       unitPrice: Number(orderItem.price),
@@ -215,6 +214,7 @@ export const OrdersPage = () => {
       }
       setModal({ open: false, edit: null });
       setOrderItems([]);
+      setSelectedCustomerId("");
     } catch (error) {
       console.error("Failed to save order:", error);
     }
@@ -223,13 +223,31 @@ export const OrdersPage = () => {
   // Open Modal Handler
   const handleOpenModal = (edit: Order | null = null) => {
     setModal({ open: true, edit });
-    setOrderItems([]);
+    if (edit) {
+      // Set the selected customer
+      setSelectedCustomerId(edit.customerId || "");
+      // Populate orderItems with existing order details
+      if (edit.orderDetails) {
+        const existingItems = edit.orderDetails.map((detail) => ({
+          itemId: detail.itemCode,
+          quantity: detail.qty,
+          price: detail.unitPrice,
+        }));
+        setOrderItems(existingItems);
+      } else {
+        setOrderItems([]);
+      }
+    } else {
+      setSelectedCustomerId("");
+      setOrderItems([]);
+    }
   };
 
   // Close Modal Handler
   const handleCloseModal = () => {
     setModal({ open: false, edit: null });
     setOrderItems([]);
+    setSelectedCustomerId("");
   };
 
   // 3. Delete Method
@@ -334,7 +352,8 @@ export const OrdersPage = () => {
                 value: c.id,
                 label: `${c.name} (${c.email})`,
               }))}
-              defaultValue={modal.edit?.customer?.id}
+              value={selectedCustomerId}
+              onChange={(e) => setSelectedCustomerId(e.target.value)}
               required
             />
 

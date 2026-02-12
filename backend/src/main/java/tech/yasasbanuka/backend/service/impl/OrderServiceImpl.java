@@ -67,11 +67,14 @@ public class OrderServiceImpl implements OrderService {
         Customer customer = customerRepository.findById(orderDTO.getCustomerId())
                 .orElseThrow(() -> new RuntimeException("Customer Not found"));
 
-        modelMapper.map(orderDTO, existingOrder);
+        // Update order properties without using modelMapper for the entire object
+        existingOrder.setOrderDate(orderDTO.getOrderDate());
         existingOrder.setCustomer(customer);
 
         List<OrderDetails> updatedDetails = orderDTO.getOrderDetails().stream().map(dto -> {
-            OrderDetails detail = modelMapper.map(dto, OrderDetails.class);
+            OrderDetails detail = new OrderDetails();
+            detail.setQty(dto.getQty());
+            detail.setUnitPrice(dto.getUnitPrice());
             detail.setOrder(existingOrder);
 
             Item item = itemRepository.findById(dto.getItemCode())
